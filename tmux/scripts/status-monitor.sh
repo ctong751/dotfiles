@@ -41,11 +41,11 @@ if command -v vm_stat &>/dev/null; then
         /Pages active/ { a = $3 }
         /Pages wired/  { w = $4 }
         /Pages occupied by compressor/ { c = $5 }
-        END { printf "%.0fG/%.0fG", (a + w + c) * ps / 1073741824, total }
+        END { printf "%.1fG/%.0fG", (a + w + c) * ps / 1073741824, total }
     ')
     [[ -n "$mem" ]] && parts+=("mem $mem")
 elif command -v free &>/dev/null; then
-    mem=$(free -g | awk '/Mem:/{printf "%.0fG/%.0fG", $3, $2}')
+    mem=$(free -g | awk '/Mem:/{printf "%.1fG/%.0fG", $3, $2}')
     [[ -n "$mem" ]] && parts+=("mem $mem")
 fi
 

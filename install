@@ -92,6 +92,7 @@ with open('$HOME/.claude/settings.json', 'w') as f:
 else
     link "$BASEDIR/claude/settings.json" "$HOME/.claude/settings.json"
 fi
+link "$BASEDIR/claude/CLAUDE.md" "$HOME/.claude/CLAUDE.md"
 
 echo ""
 echo "Done!"
