@@ -39,6 +39,11 @@ echo "[zsh]"
 link "$BASEDIR/zsh/zshrc" "$HOME/.zshrc"
 link "$BASEDIR/zsh/p10k.zsh" "$HOME/.p10k.zsh"
 
+# Tmux
+echo "[tmux]"
+mkdir -p "$HOME/.config/tmux"
+link "$BASEDIR/tmux/tmux.conf" "$HOME/.config/tmux/tmux.conf"
+
 # Claude Code
 echo "[claude]"
 mkdir -p "$HOME/.claude"
