@@ -138,7 +138,7 @@ refresh_cache() {
 
 # Refresh cache if stale
 if [[ -f "$CACHE_FILE" ]]; then
-    cache_age=$(( $(date +%s) - $(stat -f %m "$CACHE_FILE" 2>/dev/null || stat -c %Y "$CACHE_FILE" 2>/dev/null) ))
+    cache_age=$(( $(date +%s) - $(stat -c %Y "$CACHE_FILE" 2>/dev/null || stat -f %m "$CACHE_FILE" 2>/dev/null) ))
     if (( cache_age >= CACHE_TTL )); then
         refresh_cache
     fi
