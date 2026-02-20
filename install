@@ -5,6 +5,28 @@ BASEDIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 BACKUP_DIR="$HOME/.dotfiles-backup/$(date +%Y%m%d-%H%M%S)"
 backed_up=false
 
+pkg_install() {
+    local pkg="$1"
+    if command -v brew &>/dev/null; then
+        brew install "$pkg"
+    elif command -v apt &>/dev/null; then
+        sudo apt install -y "$pkg"
+    else
+        echo "  ERROR: No supported package manager found (need brew or apt)"
+        echo "  Please install $pkg manually and re-run this script"
+        return 1
+    fi
+}
+
+ensure() {
+    local cmd="$1"
+    local pkg="${2:-$1}"
+    if ! command -v "$cmd" &>/dev/null; then
+        echo "  $cmd not found, installing..."
+        pkg_install "$pkg"
+    fi
+}
+
 backup() {
     local target="$1"
     if [[ -e "$target" && ! -L "$target" ]]; then
@@ -31,6 +53,7 @@ echo ""
 
 # Neovim
 echo "[nvim]"
+ensure nvim neovim
 mkdir -p "$HOME/.config"
 link "$BASEDIR/nvim" "$HOME/.config/nvim"
 
@@ -41,6 +64,7 @@ link "$BASEDIR/zsh/p10k.zsh" "$HOME/.p10k.zsh"
 
 # Tmux
 echo "[tmux]"
+ensure tmux
 link "$BASEDIR/tmux" "$HOME/.config/tmux"
 
 # Claude Code
