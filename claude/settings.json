@@ -1,7 +1,7 @@
 {
   "statusLine": {
     "type": "command",
-    "command": "bunx -y ccstatusline@latest",
+    "command": "npx -y ccstatusline@latest",
     "padding": 0
   }
 }
