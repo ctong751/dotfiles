@@ -38,7 +38,7 @@ dotfiles/
 │           ├── devicons.lua
 │           ├── diffview.lua
 │           ├── fugitive.lua
-│           ├── galaxyline.lua
+│           ├── lualine.lua
 │           ├── lsp/init.lua
 │           ├── prettier.lua
 │           ├── telescope.lua
