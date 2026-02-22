@@ -4,12 +4,12 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Overview
 
-Personal dotfiles repository containing Neovim, Zsh, and Claude Code configuration. All nvim config files are Lua.
+Personal dotfiles repository containing Neovim, Zsh, Tmux, Git, Ghostty, and Claude Code configuration. All nvim config files are Lua.
 
 ## Installation
 
 ```bash
-./install  # Symlinks nvim, zsh, p10k, and claude configs into place
+./install  # Symlinks all configs into place
 ```
 
 ## Repository Structure
@@ -21,6 +21,11 @@ dotfiles/
 ├── install
 ├── claude/
 │   └── settings.json          # Claude Code statusline config
+├── git/
+│   ├── gitconfig              # Global git config (identity, LFS, defaults)
+│   └── gitignore              # Global gitignore (.DS_Store, etc.)
+├── ghostty/
+│   └── config                 # Ghostty terminal config (theme, font)
 ├── nvim/
 │   ├── init.lua               # Entry point: require("ctong")
 │   └── lua/ctong/
@@ -39,6 +44,10 @@ dotfiles/
 │           ├── telescope.lua
 │           ├── theme.lua
 │           └── treesitter.lua
+├── tmux/
+│   ├── tmux.conf              # Tmux config (status bar, keybinds)
+│   └── scripts/
+│       └── status-monitor.sh  # System stats for status bar
 └── zsh/
     ├── zshrc                  # Core shell config (cross-platform)
     └── p10k.zsh               # Powerlevel10k prompt config

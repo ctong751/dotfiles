@@ -1,0 +1,14 @@
+[user]
+	email = catong51@gmail.com
+	name = Chris Tong
+[filter "lfs"]
+	clean = git-lfs clean -- %f
+	smudge = git-lfs smudge -- %f
+	process = git-lfs filter-process
+	required = true
+[core]
+	excludesfile = ~/.gitignore
+[init]
+	defaultBranch = main
+[push]
+	autoSetupRemote = true

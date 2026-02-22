@@ -6,6 +6,9 @@ Personal dotfiles for a portable terminal environment: Neovim, Zsh with Powerlev
 
 - **Neovim** (lazy.nvim) — Kanagawa theme, LSP via lsp-zero + Mason, Telescope, Treesitter, Diffview, Fugitive
 - **Zsh** — oh-my-zsh with Powerlevel10k prompt and zsh-autosuggestions
+- **Tmux** — custom two-line status bar with git branch, system stats
+- **Git** — global gitconfig and gitignore
+- **Ghostty** — terminal theme and font config
 - **Claude Code** — statusline config (ccstatusline)
 
 ## Prerequisites
@@ -26,7 +29,10 @@ cd ~/repos/dotfiles
 
 The install script will:
 - Symlink `nvim/` to `~/.config/nvim`
+- Symlink `git/gitconfig` to `~/.gitconfig` and `git/gitignore` to `~/.gitignore`
+- Symlink `ghostty/config` to `~/.config/ghostty/config`
 - Symlink `zsh/zshrc` to `~/.zshrc` and `zsh/p10k.zsh` to `~/.p10k.zsh`
+- Symlink `tmux/` to `~/.config/tmux`
 - Merge Claude statusline config into `~/.claude/settings.json` (or symlink if none exists)
 - Back up any existing files before overwriting
 

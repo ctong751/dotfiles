@@ -57,6 +57,16 @@ ensure nvim neovim
 mkdir -p "$HOME/.config"
 link "$BASEDIR/nvim" "$HOME/.config/nvim"
 
+# Git
+echo "[git]"
+link "$BASEDIR/git/gitconfig" "$HOME/.gitconfig"
+link "$BASEDIR/git/gitignore" "$HOME/.gitignore"
+
+# Ghostty
+echo "[ghostty]"
+mkdir -p "$HOME/.config/ghostty"
+link "$BASEDIR/ghostty/config" "$HOME/.config/ghostty/config"
+
 # Zsh
 echo "[zsh]"
 link "$BASEDIR/zsh/zshrc" "$HOME/.zshrc"
