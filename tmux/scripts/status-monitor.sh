@@ -49,16 +49,22 @@ level_bar() {
 refresh_cache() {
     local parts=()
 
-    # Battery (emoji swap at 20%, color gradient inverted — green=full, red=empty)
+    # Battery (emoji swap at 20%, lightning bolt when charging, color gradient inverted)
     local batt_pct=""
+    local charging=false
     if command -v pmset &>/dev/null; then
-        batt_pct=$(pmset -g batt | grep -Eo '[0-9]+%' | head -1 | tr -d '%')
+        local batt_info
+        batt_info=$(pmset -g batt)
+        batt_pct=$(echo "$batt_info" | grep -Eo '[0-9]+%' | head -1 | tr -d '%')
+        echo "$batt_info" | grep -q 'AC Power' && charging=true
     elif [[ -f /sys/class/power_supply/BAT0/capacity ]]; then
         batt_pct=$(cat /sys/class/power_supply/BAT0/capacity)
+        [[ "$(cat /sys/class/power_supply/BAT0/status 2>/dev/null)" == "Charging" ]] && charging=true
     fi
     if [[ -n "$batt_pct" ]]; then
         local icon="🔋"
         (( batt_pct <= 20 )) && icon="🪫"
+        $charging && icon="⚡"
         # Invert percentage for color (low battery = high urgency)
         local urgency=$(( 100 - batt_pct ))
         local color=$(cpu_color "$urgency")
