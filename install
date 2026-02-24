@@ -104,6 +104,18 @@ else
 fi
 link "$BASEDIR/claude/CLAUDE.md" "$HOME/.claude/CLAUDE.md"
 
+# Keyboard (Linux only — remap Caps Lock to Control)
+if [[ "$(uname)" == "Linux" && -f /etc/default/keyboard ]]; then
+    echo "[keyboard]"
+    if ! grep -q 'ctrl:nocaps' /etc/default/keyboard; then
+        sudo cp "$BASEDIR/keyboard/keyboard" /etc/default/keyboard
+        echo "  Copied keyboard config to /etc/default/keyboard (Caps Lock -> Control)"
+        echo "  Run 'sudo dpkg-reconfigure keyboard-configuration' or reboot to apply"
+    else
+        echo "  Already configured (ctrl:nocaps)"
+    fi
+fi
+
 echo ""
 echo "Done!"
 if [[ "$backed_up" == true ]]; then
