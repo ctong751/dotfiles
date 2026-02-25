@@ -1,0 +1,36 @@
+#!/bin/bash
+# Toggle-focus a window by WM_CLASS (Raycast-style behavior):
+#   - Not running   → launch it
+#   - Running, not focused → focus it
+#   - Already focused → minimize it
+# Usage: focus-or-open <wm_class> <launch_command>
+
+wm_class="$1"
+launch_cmd="$2"
+
+if [ -z "$wm_class" ] || [ -z "$launch_cmd" ]; then
+    echo "Usage: focus-or-open <wm_class> <launch_command>"
+    exit 1
+fi
+
+# Find window ID by WM_CLASS column only (field 3 in wmctrl -l -x output)
+wid=$(wmctrl -l -x | awk -v class="$wm_class" 'tolower($3) ~ tolower(class) {print $1; exit}')
+
+if [ -z "$wid" ]; then
+    # App not running — launch it
+    $launch_cmd &
+else
+    # Get the active window ID (convert xdotool decimal to hex for comparison)
+    active_dec=$(xdotool getactivewindow 2>/dev/null)
+    if [ -n "$active_dec" ]; then
+        active_wid=$(printf "0x%08x" "$active_dec")
+    fi
+
+    if [ "$wid" = "$active_wid" ]; then
+        # Already focused — minimize it
+        xdotool windowminimize "$wid" 2>/dev/null
+    else
+        # Not focused — bring it to front
+        wmctrl -i -a "$wid"
+    fi
+fi

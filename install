@@ -104,6 +104,16 @@ else
 fi
 link "$BASEDIR/claude/CLAUDE.md" "$HOME/.claude/CLAUDE.md"
 
+# Hotkeys (Linux + GNOME only — Raycast-style app switching)
+if [[ "$(uname)" == "Linux" ]] && command -v gsettings &>/dev/null; then
+    echo "[hotkeys]"
+    ensure wmctrl
+    ensure xdotool
+    mkdir -p "$HOME/.config/hotkeys"
+    link "$BASEDIR/hotkeys/focus-or-open" "$HOME/.config/hotkeys/focus-or-open"
+    "$BASEDIR/hotkeys/setup-gnome-keybindings.sh"
+fi
+
 # Keyboard (Linux only — remap Caps Lock to Control)
 if [[ "$(uname)" == "Linux" && -f /etc/default/keyboard ]]; then
     echo "[keyboard]"
