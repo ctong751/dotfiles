@@ -44,3 +44,10 @@ export PATH="$HOME/.local/bin:$PATH"
 
 # Source machine-specific config (nvm, sdkman, API keys, etc.)
 [[ -f ~/.zshrc.local ]] && source ~/.zshrc.local
+
+# bun completions
+[ -s "/home/ctong/.bun/_bun" ] && source "/home/ctong/.bun/_bun"
+
+# bun
+export BUN_INSTALL="$HOME/.bun"
+export PATH="$BUN_INSTALL/bin:$PATH"
