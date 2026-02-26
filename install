@@ -5,6 +5,34 @@ BASEDIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 BACKUP_DIR="$HOME/.dotfiles-backup/$(date +%Y%m%d-%H%M%S)"
 backed_up=false
 
+# Colors & symbols
+if [[ -t 1 ]]; then
+    bold='\033[1m'
+    dim='\033[2m'
+    green='\033[32m'
+    yellow='\033[33m'
+    red='\033[31m'
+    reset='\033[0m'
+else
+    bold='' dim='' green='' yellow='' red='' reset=''
+fi
+
+# Buffered output — collects items per section, prints one line when flushed
+_section="" _items=""
+section() {
+    flush
+    _section="$1"
+    _items=""
+}
+ok()   { [[ -n "$_items" ]] && _items+=", "; _items+="$1"; }
+warn() { printf "  ${yellow}⚠ %-10s${reset} %s\n" "$_section" "$1"; }
+err()  { printf "  ${red}✗ %-10s${reset} %s\n" "$_section" "$1"; }
+info() { printf "  ${dim}  %-10s %s${reset}\n" "" "$1"; }
+flush() {
+    [[ -z "$_section" ]] && return
+    printf "  ${green}✓${reset} ${bold}%-10s${reset} ${dim}%s${reset}\n" "$_section" "$_items"
+}
+
 pkg_install() {
     local pkg="$1"
     if command -v brew &>/dev/null; then
@@ -12,8 +40,7 @@ pkg_install() {
     elif command -v apt &>/dev/null; then
         sudo apt install -y "$pkg"
     else
-        echo "  ERROR: No supported package manager found (need brew or apt)"
-        echo "  Please install $pkg manually and re-run this script"
+        err "no package manager found (need brew or apt)"
         return 1
     fi
 }
@@ -22,7 +49,6 @@ ensure() {
     local cmd="$1"
     local pkg="${2:-$1}"
     if ! command -v "$cmd" &>/dev/null; then
-        echo "  $cmd not found, installing..."
         pkg_install "$pkg"
     fi
 }
@@ -35,7 +61,6 @@ backup() {
             backed_up=true
         fi
         cp -r "$target" "$BACKUP_DIR/"
-        echo "  Backed up $(basename "$target") -> $BACKUP_DIR/"
     fi
 }
 
@@ -45,43 +70,41 @@ link() {
     backup "$dst"
     rm -rf "$dst"
     ln -s "$src" "$dst"
-    echo "  Linked $dst -> $src"
+    ok "$(basename "$dst")"
 }
 
-echo "Installing dotfiles..."
-echo ""
+printf "\n${bold}  dotfiles${reset} ${dim}— installing into %s${reset}\n\n" "$HOME"
 
 # Neovim
-echo "[nvim]"
+section "nvim"
 ensure nvim neovim
 mkdir -p "$HOME/.config"
 link "$BASEDIR/nvim" "$HOME/.config/nvim"
 
 # Git
-echo "[git]"
+section "git"
 link "$BASEDIR/git/gitconfig" "$HOME/.gitconfig"
 link "$BASEDIR/git/gitignore" "$HOME/.gitignore"
 
 # Ghostty
-echo "[ghostty]"
+section "ghostty"
 mkdir -p "$HOME/.config/ghostty"
 link "$BASEDIR/ghostty/config" "$HOME/.config/ghostty/config"
 
 # Zsh
-echo "[zsh]"
+section "zsh"
 link "$BASEDIR/zsh/zshrc" "$HOME/.zshrc"
 link "$BASEDIR/zsh/p10k.zsh" "$HOME/.p10k.zsh"
 
 # Tmux
-echo "[tmux]"
+section "tmux"
 ensure tmux
 link "$BASEDIR/tmux" "$HOME/.config/tmux"
 
 # Claude Code
-echo "[claude]"
+section "claude"
 mkdir -p "$HOME/.claude"
 if [[ -f "$HOME/.claude/settings.json" ]]; then
-    # Merge statusLine into existing settings rather than overwriting
     if command -v python3 &>/dev/null; then
         python3 -c "
 import json, sys
@@ -94,19 +117,18 @@ with open('$HOME/.claude/settings.json', 'w') as f:
     json.dump(existing, f, indent=2)
     f.write('\n')
 "
-        echo "  Merged statusLine config into ~/.claude/settings.json"
+        ok "settings.json (merged)"
     else
-        echo "  WARNING: python3 not found, skipping Claude settings merge"
-        echo "  Manually add statusLine config from $BASEDIR/claude/settings.json"
+        warn "python3 not found, skipping settings merge"
     fi
 else
     link "$BASEDIR/claude/settings.json" "$HOME/.claude/settings.json"
 fi
 link "$BASEDIR/claude/CLAUDE.md" "$HOME/.claude/CLAUDE.md"
 
-# Hotkeys (Linux + GNOME only — Raycast-style app switching)
+# Hotkeys (Linux + GNOME only)
 if [[ "$(uname)" == "Linux" ]] && command -v gsettings &>/dev/null; then
-    echo "[hotkeys]"
+    section "hotkeys"
     ensure wmctrl
     ensure xdotool
     mkdir -p "$HOME/.config/hotkeys"
@@ -116,18 +138,19 @@ fi
 
 # Keyboard (Linux only — remap Caps Lock to Control)
 if [[ "$(uname)" == "Linux" && -f /etc/default/keyboard ]]; then
-    echo "[keyboard]"
+    section "keyboard"
     if ! grep -q 'ctrl:nocaps' /etc/default/keyboard; then
         sudo cp "$BASEDIR/keyboard/keyboard" /etc/default/keyboard
-        echo "  Copied keyboard config to /etc/default/keyboard (Caps Lock -> Control)"
-        echo "  Run 'sudo dpkg-reconfigure keyboard-configuration' or reboot to apply"
+        ok "caps lock → control"
+        info "reboot or run 'sudo dpkg-reconfigure keyboard-configuration' to apply"
     else
-        echo "  Already configured (ctrl:nocaps)"
+        ok "ctrl:nocaps"
     fi
 fi
 
-echo ""
-echo "Done!"
+flush
+printf "\n${bold}${green}  ✓ done${reset}"
 if [[ "$backed_up" == true ]]; then
-    echo "Backups saved to: $BACKUP_DIR"
+    printf " ${dim}(backups in $BACKUP_DIR)${reset}"
 fi
+printf "\n\n"
