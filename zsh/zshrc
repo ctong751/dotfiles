@@ -46,7 +46,7 @@ export PATH="$HOME/.local/bin:$PATH"
 [[ -f ~/.zshrc.local ]] && source ~/.zshrc.local
 
 # bun completions
-[ -s "/home/ctong/.bun/_bun" ] && source "/home/ctong/.bun/_bun"
+[ -s "$HOME/.bun/_bun" ] && source "$HOME/.bun/_bun"
 
 # bun
 export BUN_INSTALL="$HOME/.bun"
