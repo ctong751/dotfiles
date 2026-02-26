@@ -1,2 +1,5 @@
-.claude/
+.claude/*
+!.claude/skills/
+!.claude/settings.json
+!.claude/mcp.json
 tmux/plugins/
