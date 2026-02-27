@@ -1,6 +1,11 @@
 require("ctong.remap")
 require("ctong.set")
 
+-- Neovim 0.11 compat: ft_to_lang was renamed to get_lang
+if not vim.treesitter.language.ft_to_lang then
+  vim.treesitter.language.ft_to_lang = vim.treesitter.language.get_lang
+end
+
 local lazypath = vim.fn.stdpath("data") .. "/lazy/lazy.nvim"
 local uv = vim.uv or vim.loop
 
