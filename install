@@ -78,6 +78,8 @@ printf "\n${bold}  dotfiles${reset} ${dim}— installing into %s${reset}\n\n" "$
 # Neovim
 section "nvim"
 ensure nvim neovim
+ensure fd
+ensure rg ripgrep
 mkdir -p "$HOME/.config"
 link "$BASEDIR/nvim" "$HOME/.config/nvim"
 
