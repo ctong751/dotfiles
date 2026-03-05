@@ -37,6 +37,8 @@ bunx prettier --check .
 bunx turbo run test
 # Single package:
 bunx turbo run test --filter=@unplugged/core
+# Single file (faster for targeted testing):
+bunx vitest run packages/unplugged/src/shopify/myFile.spec.ts
 ```
 
 ### Build
@@ -69,6 +71,11 @@ Commit prefix: `UG-NNN: description`
 - Feature branches only; never commit to `main` directly
 - Open PRs against `main`
 - CI runs lint, build, test, type-check via turbo
+
+## Shopify API Notes
+
+- **`productVariantUpdate` is removed** in newer Shopify API versions. Use `productVariantsBulkUpdate` instead — it takes `productId` + array of `{ id, sku, ... }` and batches all variant updates for a product in one call.
+- One-off scripts go in `scripts/` at the repo root. Run with `bun scripts/my-script.ts`.
 
 ## Jira tickets
 
