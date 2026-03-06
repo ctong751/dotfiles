@@ -80,3 +80,29 @@ Commit prefix: `UG-NNN: description`
 ## Jira tickets
 
 Ticket IDs use the `UG-` prefix. Use the `jira` skill to look them up.
+
+## Shopify Variant Option Values
+
+When creating/updating variants, `optionValues` entries **must include either `id` or `name`**; omitting both causes:
+```
+[INVALID_INPUT] id or name must be specified (field: variants.0.optionValues.0)
+```
+Prefer `id` when the option value already exists in Shopify.
+
+## D1 Database (Cloudflare)
+
+Database ID: `cdefb879-c38e-44e3-a723-5e60601fb740`
+
+**Always query the schema first before writing SQL** — never guess table or column names:
+```sql
+SELECT name FROM sqlite_master WHERE type='table' ORDER BY name;
+```
+
+Known tables (as of 2026-03): `account`, `authenticator`, `buylist`, `card`, `config`, `finish`, `inventory`, `list`, `list_item`, `list_user`, `pricing_action`, `pricing_condition`, `pricing_minimum`, `pricing_rule`, `revalidations`, `session`, `set`, `shopify_connection`, `shopify_inventory`, `store`
+
+⚠️ Tables use **singular names**: `list_item` (not `list_items`), `card` (not `card_variant`).
+
+## Cloudflare MCP / Observability
+
+- `workers_get_worker` takes `scriptName` as a top-level string, not inside a `query` object.
+- `workers_get_worker_code` often exceeds MCP token limits. When it errors with "result exceeds maximum allowed tokens", the output is saved to a file under `~/.claude/projects/`. Use `grep` or `python3` on that file — do not retry the MCP call.
