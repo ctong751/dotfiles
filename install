@@ -101,6 +101,7 @@ link "$BASEDIR/zsh/p10k.zsh" "$HOME/.p10k.zsh"
 # Tmux
 section "tmux"
 ensure tmux
+[[ "$(uname)" == "Linux" ]] && ensure playerctl
 link "$BASEDIR/tmux" "$HOME/.config/tmux"
 
 # Claude Code

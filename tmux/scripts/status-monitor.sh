@@ -111,7 +111,7 @@ refresh_cache() {
         fi
     fi
 
-    # Spotify track info (macOS only, guard against launching the app)
+    # Now playing track info (macOS: AppleScript, Linux: playerctl)
     local spotify_text=""
     if [[ "$(uname)" == "Darwin" ]]; then
         spotify_text=$(osascript -e '
@@ -126,6 +126,15 @@ refresh_cache() {
             end if
             return ""
         ' 2>/dev/null)
+    elif command -v playerctl &>/dev/null; then
+        local status
+        status=$(playerctl status 2>/dev/null)
+        if [[ "$status" == "Playing" || "$status" == "Paused" ]]; then
+            local artist track
+            artist=$(playerctl metadata artist 2>/dev/null)
+            track=$(playerctl metadata title 2>/dev/null)
+            [[ -n "$artist" && -n "$track" ]] && spotify_text="${artist} – ${track}"
+        fi
     fi
 
     # Join monitoring parts with bullet separator
