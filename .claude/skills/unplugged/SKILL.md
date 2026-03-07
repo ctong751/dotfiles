@@ -106,3 +106,8 @@ Known tables (as of 2026-03): `account`, `authenticator`, `buylist`, `card`, `co
 
 - `workers_get_worker` takes `scriptName` as a top-level string, not inside a `query` object.
 - `workers_get_worker_code` often exceeds MCP token limits. When it errors with "result exceeds maximum allowed tokens", the output is saved to a file under `~/.claude/projects/`. Use `grep` or `python3` on that file — do not retry the MCP call.
+- **Observability timeframes**: The `reference` field in `query_worker_observability` timeframes defaults to epoch (`1970-01-01T00:00:00Z`), so relative offsets like `-1h` return empty results. **Always use absolute ISO timestamps** for the reference field, e.g.:
+  ```json
+  { "reference": "2026-03-05T23:00:00Z", "offset": "-1h" }
+  ```
+  Use `date -u +%Y-%m-%dT%H:%M:%SZ` in Bash to get the current UTC time when constructing these queries.
