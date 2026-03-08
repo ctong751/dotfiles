@@ -37,8 +37,13 @@ bunx prettier --check .
 bunx turbo run test
 # Single package:
 bunx turbo run test --filter=@unplugged/core
-# Single file (faster for targeted testing):
+# Single file (fastest — skips turbo, runs vitest directly):
 bunx vitest run packages/unplugged/src/shopify/myFile.spec.ts
+```
+
+⚠️ **Never use `npx vitest` or `npm`** — this project uses Bun. Always use `bunx vitest` for running tests directly.
+
+```bash
 ```
 
 ### Build
