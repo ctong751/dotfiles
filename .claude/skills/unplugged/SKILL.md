@@ -8,6 +8,17 @@ allowed-tools: Bash
 
 Monorepo using **Bun** + **Turbo**. Worktrees are placed as siblings to the main repo (e.g. `~/repos/UG-432-fix-foo`).
 
+## ⚠️ Running Tests — Read This First
+
+**Before running any test command**, read the repo's local testing skill:
+```
+cat ~/repos/unplugged/.claude/skills/testing/SKILL.md
+```
+
+**NEVER use `npx vitest`, `npm run test`, or bare `vitest`** — this repo uses Bun.
+Always use `bun turbo run test --filter=<workspace> --only` or `bunx vitest` directly.
+Using `npx` will likely resolve the wrong binary or fail entirely.
+
 ## Key Commands
 
 ### Type checking
