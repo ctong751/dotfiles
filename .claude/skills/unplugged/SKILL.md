@@ -8,16 +8,32 @@ allowed-tools: Bash
 
 Monorepo using **Bun** + **Turbo**. Worktrees are placed as siblings to the main repo (e.g. `~/repos/UG-432-fix-foo`).
 
-## ⚠️ Running Tests — Read This First
+## ⚠️ Running Tests — Critical Rules
 
-**Before running any test command**, read the repo's local testing skill:
-```
-cat ~/repos/unplugged/.claude/skills/testing/SKILL.md
+**NEVER use `npx vitest`, `npm run test`, or bare `vitest`** — this repo uses Bun. `npx` will fail or resolve the wrong binary. Use these exact commands:
+
+```bash
+# All tests in a workspace
+bun turbo run test --filter='./packages/unplugged' --only
+bun turbo run test --filter='./workers/web' --only
+
+# Single file or pattern (--only required when passing args via --)
+bun turbo run test --filter='./packages/unplugged' --only -- applyPricingRules
+
+# Direct vitest (fastest for a single file)
+bunx vitest run packages/unplugged/src/pricing/applyPricingRules.spec.ts
 ```
 
-**NEVER use `npx vitest`, `npm run test`, or bare `vitest`** — this repo uses Bun.
-Always use `bun turbo run test --filter=<workspace> --only` or `bunx vitest` directly.
-Using `npx` will likely resolve the wrong binary or fail entirely.
+Filter aliases:
+
+| Short filter | Package |
+|---|---|
+| `./packages/unplugged` | `@unplugged/core` |
+| `./workers/web` | `@unplugged/web` |
+| `./workers/shopify-inventory-sync` | `@unplugged/shopify-inventory-sync` |
+| `./workers/card-pricing-sync` | `@unplugged/card-pricing-sync` |
+
+For full testing docs: `cat ~/repos/unplugged/.claude/skills/testing/SKILL.md`
 
 ## Key Commands
 
@@ -40,21 +56,6 @@ bunx turbo run check-types --filter=@unplugged/shopify-inventory-sync
 ```bash
 bunx turbo run lint
 bunx prettier --check .
-```
-
-### Tests
-
-```bash
-bunx turbo run test
-# Single package:
-bunx turbo run test --filter=@unplugged/core
-# Single file (fastest — skips turbo, runs vitest directly):
-bunx vitest run packages/unplugged/src/shopify/myFile.spec.ts
-```
-
-⚠️ **Never use `npx vitest` or `npm`** — this project uses Bun. Always use `bunx vitest` for running tests directly.
-
-```bash
 ```
 
 ### Build
