@@ -68,12 +68,17 @@ bunx turbo run build
 
 ```
 packages/
-  core/        # @unplugged/core — shared DB, utils, types
-  shopify-client/ # @unplugged/shopify-client — Shopify API wrapper
+  unplugged/         # @unplugged/core — shared business logic, utils, types
+  unplugged-db/      # @unplugged/db — Drizzle schema + migrations
+  shopify-client/    # @unplugged/shopify-client — Shopify API wrapper
+  db-schema/         # raw SQL schema
+  eslint-config/     # @unplugged/eslint-config
+  typescript-config/ # @unplugged/typescript-config
 workers/
-  shopify-inventory-sync/  # Cloudflare Worker — queue consumer
-apps/
-  web/         # Next.js frontend (OpenNext + Cloudflare)
+  web/                     # @unplugged/web — Next.js frontend (OpenNext + Cloudflare)
+  shopify-inventory-sync/  # @unplugged/shopify-inventory-sync — Cloudflare Worker
+  card-pricing-sync/       # @unplugged/card-pricing-sync — Cloudflare Worker
+  scryfall-sync/           # @unplugged/scryfall-sync — Cloudflare Worker
 ```
 
 ## Worktrees
