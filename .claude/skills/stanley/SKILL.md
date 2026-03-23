@@ -87,6 +87,36 @@ packages/
 - Drizzle types inferred from schema (`$inferSelect`, `$inferInsert`)
 - External integrations (Home Assistant, Google Calendar, GitHub) called from API server
 
+## Production Build & Static Serving
+
+The API serves the frontend in production. The `apps/api` package has a `build` script that compiles the web app and copies the output into `api/dist/`:
+
+```bash
+# Build the frontend and deploy to api/dist/
+cd ~/repos/stanley/apps/api && bun run build
+# Equivalent to: cd ../web && bun run build && cp -r dist ../api/dist
+
+# Start production server (serves API + static files on :5000)
+cd ~/repos/stanley/apps/api && bun run start
+```
+
+The backend's catch-all route serves `dist/index.html` for non-API paths (SPA routing). `dist/` is gitignored — always rebuild after frontend changes.
+
+**Dev mode** (Vite dev server on :5001, proxies `/api/*` → :5000):
+```bash
+cd ~/repos/stanley && bun run dev
+```
+
+**Port :5000 is almost always in use** (the running production server). If you need to test the server starts correctly, just check `curl -s -o /dev/null -w "%{http_code}" http://localhost:5000/` — a 200 means it's serving fine.
+
+## ⚠️ Web TypeScript Errors on Build
+
+`bun run build` in `apps/api` will fail if `apps/web` has TypeScript errors. Common patterns to watch for in `apps/web/src/`:
+
+- **Undefined refs**: `someRef.current.method()` where `someRef` was never declared — replace with direct DOM/window API (e.g., `window.speechSynthesis.cancel()`)
+- **Recharts type issues**: Use `// @ts-expect-error` comment above the offending prop rather than trying to cast
+- These errors only surface at build time, not during `bun run dev`
+
 ## Database
 
 SQLite at `apps/api/data/stanley.db`. Migrations via `drizzle-kit push`.
