@@ -90,11 +90,28 @@ link "$BASEDIR/git/gitignore" "$HOME/.gitignore"
 
 # Ghostty
 section "ghostty"
-mkdir -p "$HOME/.config/ghostty"
-link "$BASEDIR/ghostty/config" "$HOME/.config/ghostty/config"
+if [[ "$(uname)" == "Darwin" ]]; then
+    ghostty_dir="$HOME/Library/Application Support/com.mitchellh.ghostty"
+else
+    ghostty_dir="$HOME/.config/ghostty"
+fi
+mkdir -p "$ghostty_dir"
+link "$BASEDIR/ghostty/config" "$ghostty_dir/config"
+if command -v brew &>/dev/null; then
+    brew list --cask font-jetbrains-mono &>/dev/null || brew install --cask font-jetbrains-mono
+    ok "JetBrains Mono"
+fi
 
 # Zsh
 section "zsh"
+if [[ ! -d "$HOME/.oh-my-zsh" ]]; then
+    RUNZSH=no KEEP_ZSHRC=yes sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
+    ok "oh-my-zsh"
+else
+    ok "oh-my-zsh (exists)"
+fi
+ensure powerlevel10k
+ensure zsh-autosuggestions
 link "$BASEDIR/zsh/zshrc" "$HOME/.zshrc"
 link "$BASEDIR/zsh/p10k.zsh" "$HOME/.p10k.zsh"
 
