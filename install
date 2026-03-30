@@ -146,6 +146,11 @@ else
 fi
 link "$BASEDIR/claude/CLAUDE.md" "$HOME/.claude/CLAUDE.md"
 
+# ccstatusline
+section "ccstatusline"
+mkdir -p "$HOME/.config/ccstatusline"
+link "$BASEDIR/ccstatusline/settings.json" "$HOME/.config/ccstatusline/settings.json"
+
 # Hotkeys (Linux + GNOME only)
 if [[ "$(uname)" == "Linux" ]] && command -v gsettings &>/dev/null; then
     section "hotkeys"

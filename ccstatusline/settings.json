@@ -1,0 +1,88 @@
+{
+  "version": 3,
+  "lines": [
+    [
+      {
+        "id": "1",
+        "type": "model",
+        "color": "cyan",
+        "rawValue": true
+      },
+      {
+        "id": "cd5d1113-4fca-46fd-98b4-5ce15532f1d2",
+        "type": "context-percentage",
+        "backgroundColor": "bgGreen",
+        "rawValue": true
+      },
+      {
+        "id": "6fe28167-55b5-4ad0-a1b8-676cace82017",
+        "type": "session-usage",
+        "backgroundColor": "bgGreen",
+        "rawValue": true
+      }
+    ],
+    [
+      {
+        "id": "737f14dc-7f94-4e63-b7ec-7f5ae3a9b544",
+        "type": "git-worktree",
+        "backgroundColor": "bgGreen"
+      },
+      {
+        "id": "81c3960d-0204-46fc-9800-8ec395cf95b5",
+        "type": "git-branch",
+        "backgroundColor": "bgWhite"
+      },
+      {
+        "id": "92da2d5f-d631-409e-93bf-bf4cfb87f84f",
+        "type": "git-branch",
+        "backgroundColor": "bgBrightMagenta"
+      },
+      {
+        "id": "52d4b097-4fdf-4945-979e-3ee34b9019b3",
+        "type": "git-changes",
+        "backgroundColor": "bgBrightCyan"
+      }
+    ],
+    [
+      {
+        "id": "fb4d3a23-6637-491d-a83c-dbbfb1559bb2",
+        "type": "reset-timer",
+        "backgroundColor": "bgBrightCyan",
+        "rawValue": true
+      },
+      {
+        "id": "5970d161-4e7a-45dc-a3e0-b0db325a51e2",
+        "type": "weekly-usage",
+        "backgroundColor": "bgGreen",
+        "rawValue": true
+      },
+      {
+        "id": "c30cde1f-9c7c-4f17-ae30-29fb71800db9",
+        "type": "session-cost",
+        "backgroundColor": "bgYellow",
+        "rawValue": true
+      }
+    ]
+  ],
+  "flexMode": "full-minus-40",
+  "compactThreshold": 60,
+  "colorLevel": 3,
+  "inheritSeparatorColors": false,
+  "globalBold": false,
+  "powerline": {
+    "enabled": true,
+    "separators": [
+      ""
+    ],
+    "separatorInvertBackground": [
+      false
+    ],
+    "startCaps": [],
+    "endCaps": [
+      ""
+    ],
+    "autoAlign": false,
+    "theme": "onedark"
+  },
+  "defaultPadding": " "
+}
