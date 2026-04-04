@@ -8,6 +8,33 @@ allowed-tools: Bash
 
 Monorepo using **Bun** + **Turbo**. Worktrees are placed as siblings to the main repo (e.g. `~/repos/UG-432-fix-foo`).
 
+## ⚠️ Running Tests — Critical Rules
+
+**NEVER use `npx vitest`, `npm run test`, or bare `vitest`** — this repo uses Bun. `npx` will fail or resolve the wrong binary. Use these exact commands:
+
+```bash
+# All tests in a workspace
+bun turbo run test --filter='./packages/unplugged' --only
+bun turbo run test --filter='./workers/web' --only
+
+# Single file or pattern (--only required when passing args via --)
+bun turbo run test --filter='./packages/unplugged' --only -- applyPricingRules
+
+# Direct vitest (fastest for a single file)
+bunx vitest run packages/unplugged/src/pricing/applyPricingRules.spec.ts
+```
+
+Filter aliases:
+
+| Short filter | Package |
+|---|---|
+| `./packages/unplugged` | `@unplugged/core` |
+| `./workers/web` | `@unplugged/web` |
+| `./workers/shopify-inventory-sync` | `@unplugged/shopify-inventory-sync` |
+| `./workers/card-pricing-sync` | `@unplugged/card-pricing-sync` |
+
+For full testing docs: `cat ~/repos/unplugged/.claude/skills/testing/SKILL.md`
+
 ## Key Commands
 
 ### Type checking
@@ -29,16 +56,6 @@ bunx turbo run check-types --filter=@unplugged/shopify-inventory-sync
 ```bash
 bunx turbo run lint
 bunx prettier --check .
-```
-
-### Tests
-
-```bash
-bunx turbo run test
-# Single package:
-bunx turbo run test --filter=@unplugged/core
-# Single file (faster for targeted testing):
-bunx vitest run packages/unplugged/src/shopify/myFile.spec.ts
 ```
 
 ### Build
@@ -80,3 +97,34 @@ Commit prefix: `UG-NNN: description`
 ## Jira tickets
 
 Ticket IDs use the `UG-` prefix. Use the `jira` skill to look them up.
+
+## Shopify Variant Option Values
+
+When creating/updating variants, `optionValues` entries **must include either `id` or `name`**; omitting both causes:
+```
+[INVALID_INPUT] id or name must be specified (field: variants.0.optionValues.0)
+```
+Prefer `id` when the option value already exists in Shopify.
+
+## D1 Database (Cloudflare)
+
+Database ID: `cdefb879-c38e-44e3-a723-5e60601fb740`
+
+**Always query the schema first before writing SQL** — never guess table or column names:
+```sql
+SELECT name FROM sqlite_master WHERE type='table' ORDER BY name;
+```
+
+Known tables (as of 2026-03): `account`, `authenticator`, `buylist`, `card`, `config`, `finish`, `inventory`, `list`, `list_item`, `list_user`, `pricing_action`, `pricing_condition`, `pricing_minimum`, `pricing_rule`, `revalidations`, `session`, `set`, `shopify_connection`, `shopify_inventory`, `store`
+
+⚠️ Tables use **singular names**: `list_item` (not `list_items`), `card` (not `card_variant`).
+
+## Cloudflare MCP / Observability
+
+- `workers_get_worker` takes `scriptName` as a top-level string, not inside a `query` object.
+- `workers_get_worker_code` often exceeds MCP token limits. When it errors with "result exceeds maximum allowed tokens", the output is saved to a file under `~/.claude/projects/`. Use `grep` or `python3` on that file — do not retry the MCP call.
+- **Observability timeframes**: The `reference` field in `query_worker_observability` timeframes defaults to epoch (`1970-01-01T00:00:00Z`), so relative offsets like `-1h` return empty results. **Always use absolute ISO timestamps** for the reference field, e.g.:
+  ```json
+  { "reference": "2026-03-05T23:00:00Z", "offset": "-1h" }
+  ```
+  Use `date -u +%Y-%m-%dT%H:%M:%SZ` in Bash to get the current UTC time when constructing these queries.
