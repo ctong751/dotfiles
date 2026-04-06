@@ -85,6 +85,7 @@ link "$BASEDIR/nvim" "$HOME/.config/nvim"
 
 # Git
 section "git"
+ensure lazygit
 link "$BASEDIR/git/gitconfig" "$HOME/.gitconfig"
 link "$BASEDIR/git/gitignore" "$HOME/.gitignore"
 
