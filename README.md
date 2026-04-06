@@ -1,6 +1,6 @@
 # dotfiles
 
-Personal dotfiles for a portable terminal environment: Neovim, Zsh with Powerlevel10k, and Claude Code statusline.
+Personal dotfiles for a portable terminal environment: Neovim, Zsh with Powerlevel10k, Claude Code statusline, and Pi agent skills.
 
 ## What's included
 
@@ -10,6 +10,7 @@ Personal dotfiles for a portable terminal environment: Neovim, Zsh with Powerlev
 - **Git** — global gitconfig and gitignore
 - **Ghostty** — terminal theme and font config
 - **Claude Code** — statusline config (ccstatusline)
+- **Pi** — custom global skill(s) plus a bootstrap script for third-party skills
 
 ## Prerequisites
 
@@ -34,7 +35,32 @@ The install script will:
 - Symlink `zsh/zshrc` to `~/.zshrc` and `zsh/p10k.zsh` to `~/.p10k.zsh`
 - Symlink `tmux/` to `~/.config/tmux`
 - Merge Claude statusline config into `~/.claude/settings.json` (or symlink if none exists)
+- Symlink the custom Pi skill `agents/skills/git-commit-safety/` into `~/.agents/skills/` and `~/.pi/agent/skills/`
 - Back up any existing files before overwriting
+
+To also install third-party skills via skills.sh during setup:
+
+```bash
+INSTALL_AGENT_SKILLS=1 ./install
+```
+
+Or install them later with:
+
+```bash
+./scripts/install-agent-skills
+```
+
+## Pi / agent skills
+
+Custom skills managed in this repo live under:
+
+- `agents/skills/`
+
+Current custom skill:
+
+- `git-commit-safety`
+
+Third-party skills are not vendored into this repo. Instead, they can be reinstalled with `./scripts/install-agent-skills`.
 
 ## Machine-specific config
 

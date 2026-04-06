@@ -146,6 +146,22 @@ else
 fi
 link "$BASEDIR/claude/CLAUDE.md" "$HOME/.claude/CLAUDE.md"
 
+# Pi / agent skills
+section "pi"
+mkdir -p "$HOME/.agents/skills" "$HOME/.pi/agent/skills"
+link "$BASEDIR/agents/skills/git-commit-safety" "$HOME/.agents/skills/git-commit-safety"
+link "$HOME/.agents/skills/git-commit-safety" "$HOME/.pi/agent/skills/git-commit-safety"
+if [[ "${INSTALL_AGENT_SKILLS:-0}" == "1" ]]; then
+    if command -v npx &>/dev/null; then
+        "$BASEDIR/scripts/install-agent-skills"
+        ok "third-party skills"
+    else
+        warn "npx not found, skipping third-party skill install"
+    fi
+else
+    info "set INSTALL_AGENT_SKILLS=1 to install third-party skills via skills.sh"
+fi
+
 # ccstatusline
 section "ccstatusline"
 mkdir -p "$HOME/.config/ccstatusline"

@@ -1,0 +1,35 @@
+#!/bin/bash
+set -euo pipefail
+
+# Installs third-party agent skills globally via skills.sh.
+# Custom personal skills are managed from this dotfiles repo and linked by ./install.
+
+if ! command -v npx >/dev/null 2>&1; then
+  echo "npx not found; cannot install third-party agent skills" >&2
+  exit 1
+fi
+
+skills=(
+  "vercel-labs/skills@find-skills"
+  "anthropics/skills@frontend-design"
+  "shadcn/ui@shadcn"
+  "vercel-labs/agent-skills@vercel-react-best-practices"
+  "vercel-labs/agent-skills@web-design-guidelines"
+)
+
+for skill in "${skills[@]}"; do
+  echo "> Installing $skill"
+  npx skills add "$skill" -g -y
+  echo
+ done
+
+cat <<'EOF'
+Installed third-party skills.
+
+Custom dotfiles-managed skill:
+- git-commit-safety
+
+Tip:
+- Re-run this script on a new machine to restore third-party skills.
+- Use `npx skills check` or `npx skills update` later to refresh them.
+EOF
