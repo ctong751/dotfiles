@@ -134,7 +134,17 @@ mkdir -p "$HOME/.claude"
 claude_settings="$HOME/.claude/settings.json"
 statusline_cmd="$HOME/.config/ccstatusline/run"
 claude_settings_existed=0
-[[ -f "$claude_settings" ]] && claude_settings_existed=1
+[[ -e "$claude_settings" || -L "$claude_settings" ]] && claude_settings_existed=1
+if [[ -L "$claude_settings" ]]; then
+    tmp_settings="$(mktemp)"
+    if [[ -e "$claude_settings" ]]; then
+        cat "$claude_settings" > "$tmp_settings"
+    else
+        printf '{}\n' > "$tmp_settings"
+    fi
+    rm "$claude_settings"
+    mv "$tmp_settings" "$claude_settings"
+fi
 if command -v python3 &>/dev/null; then
     CLAUDE_SETTINGS="$claude_settings" DOTFILES_CLAUDE_SETTINGS="$BASEDIR/claude/settings.json" STATUSLINE_CMD="$statusline_cmd" python3 - <<'PY'
 import json
@@ -153,11 +163,19 @@ if settings_path.exists():
 with dotfiles_path.open() as f:
     dotfiles = json.load(f)
 
-dotfiles.setdefault("statusLine", {})["command"] = statusline_cmd
-existing.update(dotfiles)
+merged = dict(existing)
+for key, value in dotfiles.items():
+    if isinstance(value, dict) and isinstance(existing.get(key), dict):
+        nested = dict(existing[key])
+        nested.update(value)
+        merged[key] = nested
+    else:
+        merged[key] = value
+
+merged.setdefault("statusLine", {})["command"] = statusline_cmd
 
 with settings_path.open("w") as f:
-    json.dump(existing, f, indent=2)
+    json.dump(merged, f, indent=2)
     f.write("\n")
 PY
     if [[ "$claude_settings_existed" == "1" ]]; then
