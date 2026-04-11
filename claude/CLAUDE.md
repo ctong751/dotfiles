@@ -7,9 +7,9 @@
 Types (most to least common): `feature/`, `bugfix/`, `epic/`, `hotfix/`, `release/`
 
 Examples:
-- `feature/HER-1510-group-class-charting`
-- `bugfix/HER-1234-fix-login-redirect`
-- `epic/HER-1452-group-class-attendance`
+- `feature/PROJ-1510-add-reporting`
+- `bugfix/PROJ-1234-fix-login-redirect`
+- `epic/PROJ-1452-attendance-workflow`
 
 ### Commit Messages
 
@@ -18,18 +18,18 @@ Always prefix commits with the ticket ID:
 `<TICKET-ID>: <description>`
 
 Examples:
-- `HER-1510: Add charting notes migration`
-- `URO-3174: Fix CTA not rendering on mobile`
+- `PROJ-1510: Add reporting migration`
+- `PROJ-3174: Fix CTA not rendering on mobile`
 
 ### Worktrees
 
 When creating worktrees, use the naming convention: `<ticket-id>-<short-feature-description>`
 
 Examples:
-- `HER-1510-group-class-charting`
-- `URO-3174-cta-fix`
+- `PROJ-1510-reporting`
+- `PROJ-3174-cta-fix`
 
-Place worktrees as siblings to the main repo directory (e.g., `../HER-1510-group-class-charting`).
+Place worktrees as siblings to the main repo directory (e.g., `../PROJ-1510-reporting`).
 
 ## Environment
 

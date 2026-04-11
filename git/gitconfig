@@ -1,6 +1,4 @@
-[user]
-	email = catong51@gmail.com
-	name = Chris Tong
+# Set user.name and user.email in ~/.gitconfig.local
 [filter "lfs"]
 	clean = git-lfs clean -- %f
 	smudge = git-lfs smudge -- %f
@@ -14,5 +12,4 @@
 	autoSetupRemote = true
 [include]
 	path = ~/.gitconfig.local
-[credential "https://dev.azure.com"]
-	useHttpPath = true
+# Put provider-specific credential settings in ~/.gitconfig.local

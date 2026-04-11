@@ -1,5 +1,5 @@
+# Keep project-specific Claude config/skills local by default in this public repo.
 .claude/*
-!.claude/skills/
 !.claude/settings.json
 !.claude/mcp.json
 tmux/plugins/

@@ -136,7 +136,7 @@ Write an ADF JSON file (e.g., `/tmp/comment-adf.json`) with this structure:
           "type": "mention",
           "attrs": {
             "id": "712020:xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx",
-            "text": "@Sarah Kennedy",
+            "text": "@Display Name",
             "userType": "DEFAULT"
           }
         },

@@ -1,0 +1,39 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+resolve_bunx() {
+  if [[ -n "${BUN_INSTALL:-}" && -x "${BUN_INSTALL}/bin/bunx" ]]; then
+    printf '%s\n' "${BUN_INSTALL}/bin/bunx"
+    return 0
+  fi
+
+  if [[ -x "$HOME/.bun/bin/bunx" ]]; then
+    printf '%s\n' "$HOME/.bun/bin/bunx"
+    return 0
+  fi
+
+  if command -v bunx >/dev/null 2>&1; then
+    command -v bunx
+    return 0
+  fi
+
+  for candidate in \
+    /opt/homebrew/bin/bunx \
+    /usr/local/bin/bunx \
+    /home/linuxbrew/.linuxbrew/bin/bunx
+  do
+    if [[ -x "$candidate" ]]; then
+      printf '%s\n' "$candidate"
+      return 0
+    fi
+  done
+
+  return 1
+}
+
+if bunx_path="$(resolve_bunx)"; then
+  exec "$bunx_path" -y ccstatusline@latest "$@"
+fi
+
+echo "ccstatusline: bunx not found. Install Bun or set BUN_INSTALL so GUI apps can resolve it." >&2
+exit 127

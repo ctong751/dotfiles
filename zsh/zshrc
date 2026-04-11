@@ -13,7 +13,7 @@ plugins=(
   git
 )
 
-source $ZSH/oh-my-zsh.sh
+source "$ZSH/oh-my-zsh.sh"
 
 # Powerlevel10k — cross-platform detection
 if [[ -f "$(brew --prefix 2>/dev/null)/share/powerlevel10k/powerlevel10k.zsh-theme" ]]; then
@@ -39,18 +39,23 @@ fi
 # Aliases
 alias vi="nvim"
 
+# Source machine-specific config first so it can override install locations.
+[[ -f "$HOME/.zshrc.local" ]] && source "$HOME/.zshrc.local"
+
 # PATH
-export PATH="$HOME/.local/bin:$PATH"
+typeset -U path PATH
 
-# Source machine-specific config (nvm, sdkman, API keys, etc.)
-[[ -f ~/.zshrc.local ]] && source ~/.zshrc.local
+prepend_path() {
+  [[ -d "$1" ]] && path=("$1" $path)
+}
 
-# bun completions
-[ -s "$HOME/.bun/_bun" ] && source "$HOME/.bun/_bun"
+prepend_path "$HOME/.local/bin"
 
 # bun
-export BUN_INSTALL="$HOME/.bun"
-export PATH="$BUN_INSTALL/bin:$PATH"
+: "${BUN_INSTALL:=$HOME/.bun}"
+export BUN_INSTALL
+[[ -s "$BUN_INSTALL/_bun" ]] && source "$BUN_INSTALL/_bun"
+prepend_path "$BUN_INSTALL/bin"
 
 # opencode
-export PATH="$HOME/.opencode/bin:$PATH"
+prepend_path "$HOME/.opencode/bin"

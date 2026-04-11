@@ -122,28 +122,56 @@ ensure tmux
 [[ "$(uname)" == "Linux" ]] && ensure playerctl
 link "$BASEDIR/tmux" "$HOME/.config/tmux"
 
+# ccstatusline
+section "ccstatusline"
+mkdir -p "$HOME/.config/ccstatusline"
+link "$BASEDIR/ccstatusline/settings.json" "$HOME/.config/ccstatusline/settings.json"
+link "$BASEDIR/ccstatusline/run" "$HOME/.config/ccstatusline/run"
+
 # Claude Code
 section "claude"
 mkdir -p "$HOME/.claude"
-if [[ -f "$HOME/.claude/settings.json" ]]; then
-    if command -v python3 &>/dev/null; then
-        python3 -c "
-import json, sys
-with open('$HOME/.claude/settings.json') as f:
-    existing = json.load(f)
-with open('$BASEDIR/claude/settings.json') as f:
+claude_settings="$HOME/.claude/settings.json"
+statusline_cmd="$HOME/.config/ccstatusline/run"
+claude_settings_existed=0
+[[ -f "$claude_settings" ]] && claude_settings_existed=1
+if command -v python3 &>/dev/null; then
+    CLAUDE_SETTINGS="$claude_settings" DOTFILES_CLAUDE_SETTINGS="$BASEDIR/claude/settings.json" STATUSLINE_CMD="$statusline_cmd" python3 - <<'PY'
+import json
+import os
+from pathlib import Path
+
+settings_path = Path(os.environ["CLAUDE_SETTINGS"])
+dotfiles_path = Path(os.environ["DOTFILES_CLAUDE_SETTINGS"])
+statusline_cmd = os.environ["STATUSLINE_CMD"]
+
+existing = {}
+if settings_path.exists():
+    with settings_path.open() as f:
+        existing = json.load(f)
+
+with dotfiles_path.open() as f:
     dotfiles = json.load(f)
+
+dotfiles.setdefault("statusLine", {})["command"] = statusline_cmd
 existing.update(dotfiles)
-with open('$HOME/.claude/settings.json', 'w') as f:
+
+with settings_path.open("w") as f:
     json.dump(existing, f, indent=2)
-    f.write('\n')
-"
+    f.write("\n")
+PY
+    if [[ "$claude_settings_existed" == "1" ]]; then
         ok "settings.json (merged)"
     else
-        warn "python3 not found, skipping settings merge"
+        ok "settings.json"
     fi
 else
-    link "$BASEDIR/claude/settings.json" "$HOME/.claude/settings.json"
+    if [[ -f "$claude_settings" ]]; then
+        warn "python3 not found, skipping settings merge"
+    else
+        printf '{\n  "statusLine": {\n    "type": "command",\n    "command": "%s",\n    "padding": 0\n  }\n}\n' "$statusline_cmd" > "$claude_settings"
+        ok "settings.json"
+    fi
 fi
 link "$BASEDIR/claude/CLAUDE.md" "$HOME/.claude/CLAUDE.md"
 
@@ -162,11 +190,6 @@ if [[ "${INSTALL_AGENT_SKILLS:-0}" == "1" ]]; then
 else
     info "set INSTALL_AGENT_SKILLS=1 to install third-party skills via skills.sh"
 fi
-
-# ccstatusline
-section "ccstatusline"
-mkdir -p "$HOME/.config/ccstatusline"
-link "$BASEDIR/ccstatusline/settings.json" "$HOME/.config/ccstatusline/settings.json"
 
 # Hotkeys (Linux + GNOME only)
 if [[ "$(uname)" == "Linux" ]] && command -v gsettings &>/dev/null; then

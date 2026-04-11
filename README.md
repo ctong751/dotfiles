@@ -18,7 +18,7 @@ Personal dotfiles for a portable terminal environment: Neovim, Zsh with Powerlev
 - [zsh](https://www.zsh.org/) + [oh-my-zsh](https://ohmyz.sh/)
 - [Powerlevel10k](https://github.com/romkatv/powerlevel10k) — `brew install powerlevel10k` (Mac) or `git clone` (Linux)
 - [zsh-autosuggestions](https://github.com/zsh-users/zsh-autosuggestions) — `brew install zsh-autosuggestions` (Mac) or `apt install` / `git clone` (Linux)
-- [bun](https://bun.sh/) — for Claude Code statusline
+- [bun](https://bun.sh/) — for Claude Code statusline (the install script adds a wrapper so GUI-launched apps can still find `bunx`)
 
 ## Installation
 
@@ -35,7 +35,8 @@ The install script will:
 - Symlink `ghostty/config` to `~/.config/ghostty/config`
 - Symlink `zsh/zshrc` to `~/.zshrc` and `zsh/p10k.zsh` to `~/.p10k.zsh`
 - Symlink `tmux/` to `~/.config/tmux`
-- Merge Claude statusline config into `~/.claude/settings.json` (or symlink if none exists)
+- Install a Bun-resolving statusline launcher at `~/.config/ccstatusline/run`
+- Merge Claude statusline config into `~/.claude/settings.json` with that launcher path
 - Symlink the custom Pi skill `agents/skills/git-commit-safety/` into `~/.agents/skills/` and `~/.pi/agent/skills/`
 - Back up any existing files before overwriting
 
@@ -65,7 +66,7 @@ Third-party skills are not vendored into this repo. Instead, they can be reinsta
 
 ## Machine-specific config
 
-Create `~/.zshrc.local` for anything specific to one machine (nvm, sdkman, API keys, etc.). It gets sourced at the end of `.zshrc`.
+Create `~/.zshrc.local` for anything specific to one machine (nvm, sdkman, API keys, custom install locations, etc.). It gets sourced before the shared PATH/tool setup in `.zshrc`, so machine-specific overrides (for example `BUN_INSTALL`) win.
 
 ## Nvim keybindings
 
