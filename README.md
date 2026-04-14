@@ -67,13 +67,13 @@ Current custom skill:
 Current custom global extensions:
 
 - `prompt-url-widget.ts` — shows a widget above the editor when a GitHub issue/PR URL appears in a prompt and updates the session name from the fetched title
-- `diff.ts` — Mario's `/diff` extension for browsing git-changed files and opening them in VS Code diff view
+- `lazygit.ts` — `/lg` extension that suspends Pi's TUI and opens `lazygit` in the current repo
 
 Notes:
 
 - `prompt-url-widget.ts` uses the GitHub (`gh`), Atlassian (`acli`), and Linear (`linear`) CLIs for title/owner metadata when available.
 - For ambiguous bare issue keys, you can set a project preference in `.pi/prompt-url-widget.json`, e.g. `{ "preferredTracker": "linear" }`.
-- `diff.ts` expects VS Code (`code`) and a git difftool config that supports `--tool=vscode` for tracked files.
+- `lazygit.ts` expects `lazygit` to be installed.
 - Third-party skills are not vendored into this repo. Instead, they can be reinstalled with `./scripts/install-agent-skills`.
 
 ## Machine-specific config

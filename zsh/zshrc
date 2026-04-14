@@ -38,6 +38,7 @@ fi
 
 # Aliases
 alias vi="nvim"
+alias lg="lazygit"
 
 # Source machine-specific config first so it can override install locations.
 [[ -f "$HOME/.zshrc.local" ]] && source "$HOME/.zshrc.local"

@@ -196,10 +196,12 @@ link "$BASEDIR/claude/CLAUDE.md" "$HOME/.claude/CLAUDE.md"
 # Pi / agent skills + extensions
 section "pi"
 mkdir -p "$HOME/.agents/skills" "$HOME/.pi/agent/skills" "$HOME/.pi/agent/extensions"
+backup "$HOME/.pi/agent/extensions/diff.ts"
+rm -rf "$HOME/.pi/agent/extensions/diff.ts"
 link "$BASEDIR/agents/skills/git-commit-safety" "$HOME/.agents/skills/git-commit-safety"
 link "$HOME/.agents/skills/git-commit-safety" "$HOME/.pi/agent/skills/git-commit-safety"
 link "$BASEDIR/pi/extensions/prompt-url-widget.ts" "$HOME/.pi/agent/extensions/prompt-url-widget.ts"
-link "$BASEDIR/pi/extensions/diff.ts" "$HOME/.pi/agent/extensions/diff.ts"
+link "$BASEDIR/pi/extensions/lazygit.ts" "$HOME/.pi/agent/extensions/lazygit.ts"
 if [[ "${INSTALL_AGENT_SKILLS:-0}" == "1" ]]; then
     if command -v npx &>/dev/null; then
         "$BASEDIR/scripts/install-agent-skills"
