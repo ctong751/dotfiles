@@ -196,12 +196,75 @@ link "$BASEDIR/claude/CLAUDE.md" "$HOME/.claude/CLAUDE.md"
 # Pi / agent skills + extensions
 section "pi"
 mkdir -p "$HOME/.agents/skills" "$HOME/.pi/agent/skills" "$HOME/.pi/agent/extensions"
+pi_settings="$HOME/.pi/agent/settings.json"
+if command -v python3 &>/dev/null; then
+    PI_SETTINGS="$pi_settings" DOTFILES_PI_SETTINGS="$BASEDIR/pi/settings.json" python3 - <<'PY'
+import json
+import os
+from pathlib import Path
+
+
+def merge(existing, dotfiles):
+    if isinstance(existing, dict) and isinstance(dotfiles, dict):
+        merged = dict(existing)
+        for key, value in dotfiles.items():
+            if key in merged:
+                merged[key] = merge(merged[key], value)
+            else:
+                merged[key] = value
+        return merged
+
+    if isinstance(existing, list) and isinstance(dotfiles, list):
+        merged = []
+        seen = set()
+        for item in [*existing, *dotfiles]:
+            marker = json.dumps(item, sort_keys=True)
+            if marker in seen:
+                continue
+            seen.add(marker)
+            merged.append(item)
+        return merged
+
+    return dotfiles
+
+
+settings_path = Path(os.environ["PI_SETTINGS"])
+dotfiles_path = Path(os.environ["DOTFILES_PI_SETTINGS"])
+
+existing = {}
+if settings_path.exists():
+    with settings_path.open() as f:
+        existing = json.load(f)
+
+with dotfiles_path.open() as f:
+    dotfiles = json.load(f)
+
+merged = merge(existing, dotfiles)
+
+with settings_path.open("w") as f:
+    json.dump(merged, f, indent=2)
+    f.write("\n")
+PY
+    ok "settings.json"
+else
+    if [[ -f "$pi_settings" ]]; then
+        warn "python3 not found, skipping settings merge"
+    else
+        cp "$BASEDIR/pi/settings.json" "$pi_settings"
+        ok "settings.json"
+    fi
+fi
 backup "$HOME/.pi/agent/extensions/diff.ts"
 rm -rf "$HOME/.pi/agent/extensions/diff.ts"
 link "$BASEDIR/agents/skills/git-commit-safety" "$HOME/.agents/skills/git-commit-safety"
 link "$HOME/.agents/skills/git-commit-safety" "$HOME/.pi/agent/skills/git-commit-safety"
-link "$BASEDIR/pi/extensions/prompt-url-widget.ts" "$HOME/.pi/agent/extensions/prompt-url-widget.ts"
-link "$BASEDIR/pi/extensions/lazygit.ts" "$HOME/.pi/agent/extensions/lazygit.ts"
+if compgen -G "$BASEDIR/pi/extensions/*.ts" > /dev/null; then
+    for extension_src in "$BASEDIR"/pi/extensions/*.ts; do
+        link "$extension_src" "$HOME/.pi/agent/extensions/$(basename "$extension_src")"
+    done
+else
+    warn "no Pi extensions found in $BASEDIR/pi/extensions"
+fi
 if [[ "${INSTALL_AGENT_SKILLS:-0}" == "1" ]]; then
     if command -v npx &>/dev/null; then
         "$BASEDIR/scripts/install-agent-skills"

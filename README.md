@@ -37,8 +37,9 @@ The install script will:
 - Symlink `tmux/` to `~/.config/tmux`
 - Install a Bun-resolving statusline launcher at `~/.config/ccstatusline/run`
 - Merge Claude statusline config into `~/.claude/settings.json` with that launcher path
+- Merge shared Pi package/settings config from `pi/settings.json` into `~/.pi/agent/settings.json`
 - Symlink the custom Pi skill `agents/skills/git-commit-safety/` into `~/.agents/skills/` and `~/.pi/agent/skills/`
-- Symlink the custom Pi extensions in `pi/extensions/` into `~/.pi/agent/extensions/`
+- Symlink every custom Pi extension in `pi/extensions/` into `~/.pi/agent/extensions/`
 - Back up any existing files before overwriting
 
 To also install third-party skills via skills.sh during setup:
@@ -59,6 +60,7 @@ Custom Pi resources managed in this repo live under:
 
 - `agents/skills/`
 - `pi/extensions/`
+- `pi/settings.json`
 
 Current custom skill:
 
@@ -68,12 +70,15 @@ Current custom global extensions:
 
 - `prompt-url-widget.ts` — shows a widget above the editor when a GitHub issue/PR URL appears in a prompt and updates the session name from the fetched title
 - `lazygit.ts` — `/lg` extension that suspends Pi's TUI and opens `lazygit` in the current repo
+- `pi-diff-viewer.ts` — `/annotate-diff` opens a GUI review bundle for diffs/files and feeds your annotations back into Pi
 
 Notes:
 
 - `prompt-url-widget.ts` uses the GitHub (`gh`), Atlassian (`acli`), and Linear (`linear`) CLIs for title/owner metadata when available.
 - For ambiguous bare issue keys, you can set a project preference in `.pi/prompt-url-widget.json`, e.g. `{ "preferredTracker": "linear" }`.
 - `lazygit.ts` expects `lazygit` to be installed.
+- All `*.ts` files in `pi/extensions/` are auto-linked by `./install`.
+- Pi npm/git packages are tracked by source in `pi/settings.json` (for example `npm:@calesennett/pi-codex-usage`) rather than vendoring the installed package files.
 - Third-party skills are not vendored into this repo. Instead, they can be reinstalled with `./scripts/install-agent-skills`.
 
 ## Machine-specific config
