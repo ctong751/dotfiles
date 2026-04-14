@@ -193,11 +193,13 @@ else
 fi
 link "$BASEDIR/claude/CLAUDE.md" "$HOME/.claude/CLAUDE.md"
 
-# Pi / agent skills
+# Pi / agent skills + extensions
 section "pi"
-mkdir -p "$HOME/.agents/skills" "$HOME/.pi/agent/skills"
+mkdir -p "$HOME/.agents/skills" "$HOME/.pi/agent/skills" "$HOME/.pi/agent/extensions"
 link "$BASEDIR/agents/skills/git-commit-safety" "$HOME/.agents/skills/git-commit-safety"
 link "$HOME/.agents/skills/git-commit-safety" "$HOME/.pi/agent/skills/git-commit-safety"
+link "$BASEDIR/pi/extensions/prompt-url-widget.ts" "$HOME/.pi/agent/extensions/prompt-url-widget.ts"
+link "$BASEDIR/pi/extensions/diff.ts" "$HOME/.pi/agent/extensions/diff.ts"
 if [[ "${INSTALL_AGENT_SKILLS:-0}" == "1" ]]; then
     if command -v npx &>/dev/null; then
         "$BASEDIR/scripts/install-agent-skills"

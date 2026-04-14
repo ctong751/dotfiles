@@ -1,6 +1,6 @@
 # dotfiles
 
-Personal dotfiles for a portable terminal environment: Neovim, Zsh with Powerlevel10k, Claude Code statusline, and Pi agent skills.
+Personal dotfiles for a portable terminal environment: Neovim, Zsh with Powerlevel10k, Claude Code statusline, and Pi agent skills/extensions.
 
 ## What's included
 
@@ -10,7 +10,7 @@ Personal dotfiles for a portable terminal environment: Neovim, Zsh with Powerlev
 - **Git** — global gitconfig, gitignore, and Lazygit
 - **Ghostty** — terminal theme and font config
 - **Claude Code** — statusline config (ccstatusline)
-- **Pi** — custom global skill(s) plus a bootstrap script for third-party skills
+- **Pi** — custom global skills/extensions plus a bootstrap script for third-party skills
 
 ## Prerequisites
 
@@ -38,6 +38,7 @@ The install script will:
 - Install a Bun-resolving statusline launcher at `~/.config/ccstatusline/run`
 - Merge Claude statusline config into `~/.claude/settings.json` with that launcher path
 - Symlink the custom Pi skill `agents/skills/git-commit-safety/` into `~/.agents/skills/` and `~/.pi/agent/skills/`
+- Symlink the custom Pi extensions in `pi/extensions/` into `~/.pi/agent/extensions/`
 - Back up any existing files before overwriting
 
 To also install third-party skills via skills.sh during setup:
@@ -52,17 +53,28 @@ Or install them later with:
 ./scripts/install-agent-skills
 ```
 
-## Pi / agent skills
+## Pi / agent skills + extensions
 
-Custom skills managed in this repo live under:
+Custom Pi resources managed in this repo live under:
 
 - `agents/skills/`
+- `pi/extensions/`
 
 Current custom skill:
 
 - `git-commit-safety`
 
-Third-party skills are not vendored into this repo. Instead, they can be reinstalled with `./scripts/install-agent-skills`.
+Current custom global extensions:
+
+- `prompt-url-widget.ts` — shows a widget above the editor when a GitHub issue/PR URL appears in a prompt and updates the session name from the fetched title
+- `diff.ts` — Mario's `/diff` extension for browsing git-changed files and opening them in VS Code diff view
+
+Notes:
+
+- `prompt-url-widget.ts` uses the GitHub (`gh`), Atlassian (`acli`), and Linear (`linear`) CLIs for title/owner metadata when available.
+- For ambiguous bare issue keys, you can set a project preference in `.pi/prompt-url-widget.json`, e.g. `{ "preferredTracker": "linear" }`.
+- `diff.ts` expects VS Code (`code`) and a git difftool config that supports `--tool=vscode` for tracked files.
+- Third-party skills are not vendored into this repo. Instead, they can be reinstalled with `./scripts/install-agent-skills`.
 
 ## Machine-specific config
 
