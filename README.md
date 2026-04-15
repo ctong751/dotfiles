@@ -98,4 +98,5 @@ Leader key: `Space`
 | `<leader>dv` | Diffview open |
 | `<leader>dh` | Diffview file history |
 | `<leader>gs` | Git status (Fugitive) |
+| `<leader>mp` | Toggle Markdown preview |
 | `<leader>re` | Return to netrw |

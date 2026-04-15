@@ -9,6 +9,7 @@ return {
       { "<leader>g", group = "git" },
       { "<leader>b", group = "buffer" },
       { "<leader>h", group = "hunk/git" },
+      { "<leader>m", group = "markdown" },
       { "<leader>x", group = "diagnostics" },
     },
   },
