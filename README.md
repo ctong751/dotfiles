@@ -33,6 +33,7 @@ The install script will:
 - Install `lazygit`
 - Symlink `git/gitconfig` to `~/.gitconfig` and `git/gitignore` to `~/.gitignore`
 - Symlink `ghostty/config` to `~/.config/ghostty/config`
+- Install JetBrains Mono Nerd Font via Homebrew when available
 - Symlink `zsh/zshrc` to `~/.zshrc` and `zsh/p10k.zsh` to `~/.p10k.zsh`
 - Symlink `tmux/` to `~/.config/tmux`
 - Install a Bun-resolving statusline launcher at `~/.config/ccstatusline/run`

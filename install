@@ -99,8 +99,8 @@ fi
 mkdir -p "$ghostty_dir"
 link "$BASEDIR/ghostty/config" "$ghostty_dir/config"
 if command -v brew &>/dev/null; then
-    brew list --cask font-jetbrains-mono &>/dev/null || brew install --cask font-jetbrains-mono
-    ok "JetBrains Mono"
+    brew list --cask font-jetbrains-mono-nerd-font &>/dev/null || brew install --cask font-jetbrains-mono-nerd-font
+    ok "JetBrains Mono Nerd Font"
 fi
 
 # Zsh
