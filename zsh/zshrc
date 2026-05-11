@@ -69,3 +69,13 @@ prepend_path "$HOME/.opencode/bin"
 export NVM_DIR="$HOME/.nvm"
 [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
 [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
+
+# nvm / Node globals
+export NVM_DIR="$HOME/.nvm"
+[[ -s "$NVM_DIR/nvm.sh" ]] && source "$NVM_DIR/nvm.sh"
+if [[ -x "$HOME/.nvm/versions/node/v24.10.0/bin/openclaw" ]]; then
+  prepend_path "$HOME/.nvm/versions/node/v24.10.0/bin"
+fi
+
+# OpenClaw Completion
+source "/home/ctong/.openclaw/completions/openclaw.zsh"
