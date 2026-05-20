@@ -38,7 +38,7 @@ The install script will:
 - Symlink `tmux/` to `~/.config/tmux`
 - Install a Bun-resolving statusline launcher at `~/.config/ccstatusline/run`
 - Merge Claude statusline config into `~/.claude/settings.json` with that launcher path
-- Merge shared Pi package/settings config from `pi/settings.json` into `~/.pi/agent/settings.json`
+- Copy authoritative Pi settings from `pi/settings.json` to `~/.pi/agent/settings.json`
 - Symlink the custom Pi skill `agents/skills/git-commit-safety/` into `~/.agents/skills/` and `~/.pi/agent/skills/`
 - Symlink every custom Pi extension in `pi/extensions/` into `~/.pi/agent/extensions/`
 - Back up any existing files before overwriting
@@ -79,7 +79,7 @@ Notes:
 - For ambiguous bare issue keys, you can set a project preference in `.pi/prompt-url-widget.json`, e.g. `{ "preferredTracker": "linear" }`.
 - `lazygit.ts` expects `lazygit` to be installed.
 - All `*.ts` files in `pi/extensions/` are auto-linked by `./install`.
-- Pi npm/git packages are tracked by source in `pi/settings.json` (for example `npm:@calesennett/pi-codex-usage`) rather than vendoring the installed package files.
+- Pi npm/git packages are tracked by source in `pi/settings.json` when desired; removing them from that file removes them on the next `./install`.
 - Third-party skills are not vendored into this repo. Instead, they can be reinstalled with `./scripts/install-agent-skills`.
 
 ## Machine-specific config
