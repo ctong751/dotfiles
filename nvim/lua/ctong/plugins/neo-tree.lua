@@ -1,6 +1,8 @@
 return {
   "nvim-neo-tree/neo-tree.nvim",
   branch = "v3.x",
+  -- Load on startup so neo-tree can replace netrw when opening directories like `nvim .`.
+  lazy = false,
   dependencies = {
     "nvim-lua/plenary.nvim",
     "nvim-tree/nvim-web-devicons",
@@ -12,6 +14,8 @@ return {
   },
   opts = {
     filesystem = {
+      -- When opening a directory with `nvim .`, use neo-tree instead of the built-in netrw explorer.
+      hijack_netrw_behavior = "open_current",
       follow_current_file = { enabled = true },
       filtered_items = {
         visible = true,
