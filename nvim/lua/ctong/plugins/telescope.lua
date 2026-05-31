@@ -19,7 +19,17 @@ return {
 
     telescope.load_extension('fzf')
 
-    vim.keymap.set('n', '<leader>ff', function() builtin.find_files({ hidden = true }) end, { desc = "Find files (incl. dotfiles, respects gitignore)" })
+    vim.keymap.set('n', '<leader>ff', function()
+      builtin.find_files({
+        hidden = true,
+        find_command = {
+          "fd",
+          "--type", "f",
+          "--hidden",
+          "--exclude", ".git",
+        },
+      })
+    end, { desc = "Find files (incl. dotfiles, respects gitignore)" })
     vim.keymap.set('n', '<leader>fF', function() builtin.find_files({ no_ignore = true, hidden = true }) end, { desc = "Find all files (incl. gitignored)" })
     vim.keymap.set('n', '<leader>fe', function()
       builtin.find_files({
