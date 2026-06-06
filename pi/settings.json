@@ -1,1 +1,11 @@
-{}
+{
+  "lastChangelogVersion": "0.75.3",
+  "packages": [
+    "npm:@calesennett/pi-codex-usage"
+  ],
+  "pi-codex-usage": {
+    "usageMode": "left",
+    "refreshWindow": "7d"
+  },
+  "defaultThinkingLevel": "low"
+}
