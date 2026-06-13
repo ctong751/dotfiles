@@ -1,39 +1,6 @@
-## Git Workflow
-
-### Branch Naming
-
-`<type>/<ticket-id>-<short-description>`
-
-Types (most to least common): `feature/`, `bugfix/`, `epic/`, `hotfix/`, `release/`
-
-Examples:
-- `feature/PROJ-1510-add-reporting`
-- `bugfix/PROJ-1234-fix-login-redirect`
-- `epic/PROJ-1452-attendance-workflow`
-
-### Commit Messages
-
-Always prefix commits with the ticket ID:
-
-`<TICKET-ID>: <description>`
-
-Examples:
-- `PROJ-1510: Add reporting migration`
-- `PROJ-3174: Fix CTA not rendering on mobile`
-
-### Worktrees
-
-When creating worktrees, use the naming convention: `<ticket-id>-<short-feature-description>`
-
-Examples:
-- `PROJ-1510-reporting`
-- `PROJ-3174-cta-fix`
-
-Place worktrees as siblings to the main repo directory (e.g., `../PROJ-1510-reporting`).
-
 ## Environment
 
-- **Editor**: Cursor (may switch to Neovim)
+- **Editor**: Neovim and Cursor
 - **Terminal**: tmux with multiple sessions and tabs (windows)
 - **Shell**: zsh with p10k
 - **Dotfiles**: `~/repos/dotfiles` (symlinked to home directory)
@@ -57,8 +24,8 @@ Place worktrees as siblings to the main repo directory (e.g., `../PROJ-1510-repo
 
 ### Sensitive Data
 - Never commit `.env` files, secrets, or credentials
-- Never log or expose PII in code
+- Never log or expose PII, PHI, or other sensitive data in code
 
 ### Code Review
 - Never approve or merge PRs autonomously
-- Always run lint, test, and build before suggesting a PR is ready
+- Always run relevant checks before suggesting a PR is ready

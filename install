@@ -204,7 +204,10 @@ ok "settings.json"
 backup "$HOME/.pi/agent/extensions/diff.ts"
 rm -rf "$HOME/.pi/agent/extensions/diff.ts"
 link "$BASEDIR/agents/skills/git-commit-safety" "$HOME/.agents/skills/git-commit-safety"
+link "$BASEDIR/agents/skills/jira" "$HOME/.agents/skills/jira"
 link "$HOME/.agents/skills/git-commit-safety" "$HOME/.pi/agent/skills/git-commit-safety"
+mkdir -p "$HOME/.claude/skills"
+link "$HOME/.agents/skills/jira" "$HOME/.claude/skills/jira"
 if compgen -G "$BASEDIR/pi/extensions/*.ts" > /dev/null; then
     for extension_src in "$BASEDIR"/pi/extensions/*.ts; do
         link "$extension_src" "$HOME/.pi/agent/extensions/$(basename "$extension_src")"
