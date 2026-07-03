@@ -3,22 +3,30 @@
 #   - Not running   → launch it
 #   - Running, not focused → focus it
 #   - Already focused → minimize it
-# Usage: focus-or-open <wm_class> <launch_command>
+# Usage: focus-or-open <wm_class> <launch_command> [launch_args...]
 
 wm_class="$1"
-launch_cmd="$2"
+shift
 
-if [ -z "$wm_class" ] || [ -z "$launch_cmd" ]; then
-    echo "Usage: focus-or-open <wm_class> <launch_command>"
+if [ -z "$wm_class" ] || [ "$#" -eq 0 ]; then
+    echo "Usage: focus-or-open <wm_class> <launch_command> [launch_args...]"
     exit 1
 fi
 
-# Find window ID by WM_CLASS column only (field 3 in wmctrl -l -x output)
-wid=$(wmctrl -l -x | awk -v class="$wm_class" 'tolower($3) ~ tolower(class) {print $1; exit}')
+# Find window ID by WM_CLASS. `wmctrl -l -x` splits classes with spaces badly,
+# so inspect each window's WM_CLASS directly with xprop.
+wid=""
+while read -r id _; do
+    class=$(xprop -id "$id" WM_CLASS 2>/dev/null || true)
+    if printf '%s\n' "$class" | grep -Fqi "$wm_class"; then
+        wid="$id"
+        break
+    fi
+done < <(wmctrl -l | awk '{print $1}')
 
 if [ -z "$wid" ]; then
     # App not running — launch it
-    $launch_cmd &
+    "$@" &
 else
     # Get the active window ID (convert xdotool decimal to hex for comparison)
     active_dec=$(xdotool getactivewindow 2>/dev/null)
