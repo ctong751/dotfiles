@@ -66,6 +66,7 @@ Custom Pi resources managed in this repo live under:
 Current custom skill:
 
 - `git-commit-safety`
+- `unslop`
 
 Current custom global extensions:
 

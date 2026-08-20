@@ -1,6 +1,5 @@
 ## Environment
 
-- **Editor**: Neovim and Cursor
 - **Terminal**: tmux with multiple sessions and tabs (windows)
 - **Shell**: zsh with p10k
 - **Dotfiles**: `~/repos/dotfiles` (symlinked to home directory)
