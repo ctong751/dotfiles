@@ -122,75 +122,9 @@ ensure tmux
 [[ "$(uname)" == "Linux" ]] && ensure playerctl
 link "$BASEDIR/tmux" "$HOME/.config/tmux"
 
-# ccstatusline
-section "ccstatusline"
-mkdir -p "$HOME/.config/ccstatusline"
-link "$BASEDIR/ccstatusline/settings.json" "$HOME/.config/ccstatusline/settings.json"
-link "$BASEDIR/ccstatusline/run" "$HOME/.config/ccstatusline/run"
-
 # Claude Code
 section "claude"
 mkdir -p "$HOME/.claude"
-claude_settings="$HOME/.claude/settings.json"
-statusline_cmd="$HOME/.config/ccstatusline/run"
-claude_settings_existed=0
-[[ -e "$claude_settings" || -L "$claude_settings" ]] && claude_settings_existed=1
-if [[ -L "$claude_settings" ]]; then
-    tmp_settings="$(mktemp)"
-    if [[ -e "$claude_settings" ]]; then
-        cat "$claude_settings" > "$tmp_settings"
-    else
-        printf '{}\n' > "$tmp_settings"
-    fi
-    rm "$claude_settings"
-    mv "$tmp_settings" "$claude_settings"
-fi
-if command -v python3 &>/dev/null; then
-    CLAUDE_SETTINGS="$claude_settings" DOTFILES_CLAUDE_SETTINGS="$BASEDIR/claude/settings.json" STATUSLINE_CMD="$statusline_cmd" python3 - <<'PY'
-import json
-import os
-from pathlib import Path
-
-settings_path = Path(os.environ["CLAUDE_SETTINGS"])
-dotfiles_path = Path(os.environ["DOTFILES_CLAUDE_SETTINGS"])
-statusline_cmd = os.environ["STATUSLINE_CMD"]
-
-existing = {}
-if settings_path.exists():
-    with settings_path.open() as f:
-        existing = json.load(f)
-
-with dotfiles_path.open() as f:
-    dotfiles = json.load(f)
-
-merged = dict(existing)
-for key, value in dotfiles.items():
-    if isinstance(value, dict) and isinstance(existing.get(key), dict):
-        nested = dict(existing[key])
-        nested.update(value)
-        merged[key] = nested
-    else:
-        merged[key] = value
-
-merged.setdefault("statusLine", {})["command"] = statusline_cmd
-
-with settings_path.open("w") as f:
-    json.dump(merged, f, indent=2)
-    f.write("\n")
-PY
-    if [[ "$claude_settings_existed" == "1" ]]; then
-        ok "settings.json (merged)"
-    else
-        ok "settings.json"
-    fi
-else
-    if [[ -f "$claude_settings" ]]; then
-        warn "python3 not found, skipping settings merge"
-    else
-        printf '{\n  "statusLine": {\n    "type": "command",\n    "command": "%s",\n    "padding": 0\n  }\n}\n' "$statusline_cmd" > "$claude_settings"
-        ok "settings.json"
-    fi
-fi
 link "$BASEDIR/claude/CLAUDE.md" "$HOME/.claude/CLAUDE.md"
 
 # Pi / agent skills + extensions

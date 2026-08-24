@@ -1,6 +1,6 @@
 # dotfiles
 
-Personal dotfiles for a portable terminal environment: Neovim, Zsh with Powerlevel10k, Claude Code statusline, and Pi agent skills/extensions.
+Personal dotfiles for a portable terminal environment: Neovim, Zsh with Powerlevel10k, Claude Code, and Pi agent skills/extensions.
 
 ## What's included
 
@@ -9,7 +9,7 @@ Personal dotfiles for a portable terminal environment: Neovim, Zsh with Powerlev
 - **Tmux** — custom two-line status bar with git branch, system stats
 - **Git** — global gitconfig, gitignore, and Lazygit
 - **Ghostty** — terminal theme and font config
-- **Claude Code** — statusline config (ccstatusline)
+- **Claude Code** — global `CLAUDE.md` instructions
 - **Pi** — custom global skills/extensions plus a bootstrap script for third-party skills
 
 ## Prerequisites
@@ -18,7 +18,6 @@ Personal dotfiles for a portable terminal environment: Neovim, Zsh with Powerlev
 - [zsh](https://www.zsh.org/) + [oh-my-zsh](https://ohmyz.sh/)
 - [Powerlevel10k](https://github.com/romkatv/powerlevel10k) — `brew install powerlevel10k` (Mac) or `git clone` (Linux)
 - [zsh-autosuggestions](https://github.com/zsh-users/zsh-autosuggestions) — `brew install zsh-autosuggestions` (Mac) or `apt install` / `git clone` (Linux)
-- [bun](https://bun.sh/) — for Claude Code statusline (the install script adds a wrapper so GUI-launched apps can still find `bunx`)
 
 ## Installation
 
@@ -36,8 +35,7 @@ The install script will:
 - Install JetBrains Mono Nerd Font via Homebrew when available
 - Symlink `zsh/zshrc` to `~/.zshrc` and `zsh/p10k.zsh` to `~/.p10k.zsh`
 - Symlink `tmux/` to `~/.config/tmux`
-- Install a Bun-resolving statusline launcher at `~/.config/ccstatusline/run`
-- Merge Claude statusline config into `~/.claude/settings.json` with that launcher path
+- Symlink `claude/CLAUDE.md` to `~/.claude/CLAUDE.md`
 - Copy authoritative Pi settings from `pi/settings.json` to `~/.pi/agent/settings.json`
 - Symlink the custom Pi skill `agents/skills/git-commit-safety/` into `~/.agents/skills/` and `~/.pi/agent/skills/`
 - Symlink every custom Pi extension in `pi/extensions/` into `~/.pi/agent/extensions/`
