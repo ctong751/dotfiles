@@ -121,6 +121,13 @@ section "tmux"
 ensure tmux
 [[ "$(uname)" == "Linux" ]] && ensure playerctl
 link "$BASEDIR/tmux" "$HOME/.config/tmux"
+if [[ ! -d "$HOME/.tmux/plugins/tpm" ]]; then
+    git clone https://github.com/tmux-plugins/tpm "$HOME/.tmux/plugins/tpm"
+    ok "tpm"
+    info "run prefix + I inside tmux to install plugins"
+else
+    ok "tpm (exists)"
+fi
 
 # Claude Code
 section "claude"
