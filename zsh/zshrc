@@ -72,7 +72,10 @@ prepend_path "$HOME/.opencode/bin"
 # nvm / Node globals
 export NVM_DIR="$HOME/.nvm"
 if [[ -s "$NVM_DIR/nvm.sh" ]]; then
-  source "$NVM_DIR/nvm.sh"
-  nvm use --silent default >/dev/null
+  # --no-use skips nvm's slow alias resolution; put the default version on PATH directly
+  source "$NVM_DIR/nvm.sh" --no-use
+  nvm_default_bin=( "$NVM_DIR"/versions/node/v$(<"$NVM_DIR/alias/default")*(N/nOn[1]) )
+  [[ -n "$nvm_default_bin" ]] && prepend_path "$nvm_default_bin/bin"
+  unset nvm_default_bin
 fi
 [[ -s "$NVM_DIR/bash_completion" ]] && source "$NVM_DIR/bash_completion"
